@@ -48,7 +48,7 @@
     {
       "id": "step-3-core-services",
       "title": "Core Services Overview",
-      "description": "The lib/core/ directory contains all service implementations (~14K lines). Key modules: config.js validates settings, capture-service.js extracts memories, recall-service.js searches and injects context, orchestrator.js selects recall strategies, world-model.js builds entity/belief/episode graphs, projection-store.js manages SQLite state, and vault-mirror.js generates the Obsidian surface.",
+      "description": "The lib/core/ directory contains all service implementations (14K lines). Key modules: config.js validates settings, capture-service.js extracts memories, recall-service.js searches and injects context, orchestrator.js selects recall strategies, world-model.js builds entity/belief/episode graphs, projection-store.js manages SQLite state, and vault-mirror.js generates the Obsidian surface.",
       "estimatedTime": 90,
       "focusDirectory": "lib/core",
       "colorMode": "fileTypes",
@@ -101,7 +101,7 @@
     {
       "id": "step-4-capture-pipeline",
       "title": "Capture Pipeline",
-      "description": "When an agent response completes, capture-service.js extracts <memory_note> XML tags and 'remember intent' phrases. Each candidate passes through policy.js — a junk filter catches system prompts, API keys, and benchmarks, while durable patterns preserve user facts and identity notes. Survivors are deduplicated (exact hash + semantic similarity), scored for quality, and upserted into the projection store. native-promotion.js can also promote chunks from MEMORY.md and daily notes into structured registry entries.",
+      "description": "When an agent response completes, capture-service.js extracts <memory_note> tags and 'remember intent' phrases. Candidates pass through policy.js for junk filtering and quality scoring, then get deduplicated and upserted into the projection store. native-promotion.js promotes chunks from MEMORY.md into structured registry entries.",
       "estimatedTime": 120,
       "focusDirectory": "lib/core",
       "colorMode": "fileTypes",
@@ -132,7 +132,7 @@
     {
       "id": "step-5-recall-orchestration",
       "title": "Recall & Orchestration",
-      "description": "Before each prompt, orchestrator.js classifies the query into one of five strategies: quick_context (FTS5 lexical search), entity_brief ('Who is X?'), relationship_brief, timeline_brief, or verification_lookup. recall-service.js executes the chosen strategy — searching memory_current with entity coreference resolution, temporal window detection, and class budgets (core/situational/decisions). Results are ranked, token-budgeted, and injected as context. llm-router.js abstracts over Ollama, OpenAI-compatible, and deterministic-only providers.",
+      "description": "Before each prompt, orchestrator.js classifies the query into one of five strategies (quick_context, entity_brief, relationship_brief, timeline_brief, verification_lookup). recall-service.js executes the strategy with coreference resolution, temporal windows, and token budgeting. llm-router.js abstracts over multiple LLM providers.",
       "estimatedTime": 120,
       "focusDirectory": "lib/core",
       "colorMode": "fileTypes",
@@ -162,7 +162,7 @@
     {
       "id": "step-6-world-model",
       "title": "World Model & Persistence",
-      "description": "world-model.js (the largest module at 2,600 lines) projects atomic memories into structured graphs: entities (person, project, org, place, topic), beliefs (fact-based assertions with temporal markers), episodes (event clusters), open loops (unresolved follow-ups), and syntheses (precomputed briefings). projection-store.js manages the SQLite schema — memory_current provides a materialized view, while event-store.js maintains an append-only log for full audit history. native-sync.js indexes MEMORY.md and daily notes for hybrid native+structured recall.",
+      "description": "world-model.js projects memories into structured graphs: entities, beliefs, episodes, open loops, and syntheses. projection-store.js manages the SQLite schema with a materialized current-state view, while event-store.js maintains an append-only audit log. native-sync.js indexes MEMORY.md for hybrid recall.",
       "estimatedTime": 120,
       "focusDirectory": "lib/core",
       "colorMode": "fileTypes",
@@ -193,7 +193,7 @@
     {
       "id": "step-7-full-picture",
       "title": "The Full Picture",
-      "description": "Beyond core services: vault-mirror.js generates a structured Obsidian vault surface (Home, Entities, Nodes, Views, Briefings, Reports). maintenance-service.js runs a nightly pipeline (snapshot, sync, dedupe, audit, vacuum, vault build). scripts/ has the CLI control plane (gigabrainctl.js) and setup wizard. tests/ provides 20 tests across unit, integration, regression, and performance categories. memory_api/ is an optional Python FastAPI web console for browsing and managing memories.",
+      "description": "vault-mirror.js generates a structured Obsidian vault surface. maintenance-service.js runs the nightly pipeline (sync, dedupe, audit, vacuum, vault build). scripts/ has the CLI control plane, tests/ covers unit through performance, and memory_api/ is an optional FastAPI web console.",
       "estimatedTime": 60,
       "focusDirectory": "",
       "colorMode": "fileTypes",
