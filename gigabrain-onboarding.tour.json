@@ -193,7 +193,7 @@
     {
       "id": "step-7-full-picture",
       "title": "The Full Picture",
-      "description": "vault-mirror.js generates a structured Obsidian vault surface. maintenance-service.js runs the nightly pipeline (sync, dedupe, audit, vacuum, vault build). scripts/ has the CLI control plane, tests/ covers unit through performance, and memory_api/ is an optional FastAPI web console.",
+      "description": "vault-mirror.js generates a structured Obsidian vault surface. maintenance-service.js runs the nightly pipeline (sync, dedupe, audit, vacuum, vault build). scripts/ has the CLI control plane, tests/ covers unit through performance, and the memory api is an optional FastAPI web console.",
       "estimatedTime": 60,
       "focusDirectory": "",
       "colorMode": "fileTypes",
