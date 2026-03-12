@@ -12,7 +12,7 @@
     {
       "id": "step-1-welcome",
       "title": "Welcome to Gigabrain",
-      "description": "Gigabrain is a long-term memory layer for OpenClaw agents. It captures memories from conversations, stores them in an event-sourced SQLite database, projects them into a structured world model, and surfaces them as an Obsidian vault. The codebase is organized into a plugin entry point, a core services library, CLI scripts, tests, and an optional web console.",
+      "description": "Gigabrain is a long-term memory layer for OpenClaw agents. It captures memories from conversations, stores them in an event sourced SQLite database, projects them into a structured world model, and surfaces them as an Obsidian vault. The codebase is organized into a plugin entry point, a core services library, CLI scripts, tests, and an optional web console.",
       "estimatedTime": 45,
       "colorMode": "fileTypes"
     },
