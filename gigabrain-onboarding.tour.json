@@ -1,0 +1,239 @@
+{
+  "id": "gigabrain-onboarding",
+  "title": "Gigabrain: Memory OS for AI Agents",
+  "description": "A guided tour through Gigabrain's architecture — from plugin entry point to capture pipelines, recall orchestration, world-model projection, and the Obsidian vault surface.",
+  "version": "1.0.0",
+  "audience": "New Contributors & AI Assistants",
+  "prerequisites": [
+    "Basic understanding of TypeScript/JavaScript",
+    "Familiarity with SQLite and event-sourcing patterns"
+  ],
+  "steps": [
+    {
+      "id": "step-1-welcome",
+      "title": "Welcome to Gigabrain",
+      "description": "Gigabrain is a long-term memory layer for OpenClaw agents. It captures memories from conversations, stores them in an event-sourced SQLite database, projects them into a structured world model, and surfaces them as an Obsidian vault. The codebase is organized into a plugin entry point, a core services library, CLI scripts, tests, and an optional web console.",
+      "estimatedTime": 45,
+      "colorMode": "fileTypes"
+    },
+    {
+      "id": "step-2-plugin-entry",
+      "title": "Plugin Entry Point",
+      "description": "index.ts is the OpenClaw plugin factory. It wires up event hooks (on:prompt-start for recall injection, on:response-complete for memory capture) and registers HTTP routes on the gateway. openclaw.plugin.json defines the full configuration schema — paths, capture settings, recall tuning, world-model options, and vault output.",
+      "estimatedTime": 60,
+      "focusDirectory": "",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "entry-files",
+          "name": "Plugin Entry & Config",
+          "color": "#8b5cf6",
+          "items": [
+            { "path": "index.ts", "type": "file" },
+            { "path": "openclaw.plugin.json", "type": "file" },
+            { "path": "package.json", "type": "file" }
+          ],
+          "opacity": 0.8,
+          "renderStrategy": "fill"
+        }
+      ],
+      "interactiveActions": [
+        {
+          "type": "click-file",
+          "description": "Click index.ts to see the plugin factory and event hooks",
+          "target": "index.ts"
+        }
+      ]
+    },
+    {
+      "id": "step-3-core-services",
+      "title": "Core Services Overview",
+      "description": "The lib/core/ directory contains all service implementations (~14K lines). Key modules: config.js validates settings, capture-service.js extracts memories, recall-service.js searches and injects context, orchestrator.js selects recall strategies, world-model.js builds entity/belief/episode graphs, projection-store.js manages SQLite state, and vault-mirror.js generates the Obsidian surface.",
+      "estimatedTime": 90,
+      "focusDirectory": "lib/core",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "capture-layer",
+          "name": "Capture Pipeline",
+          "color": "#10b981",
+          "items": [
+            { "path": "lib/core/capture-service.js", "type": "file" },
+            { "path": "lib/core/policy.js", "type": "file" },
+            { "path": "lib/core/native-promotion.js", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "fill"
+        },
+        {
+          "id": "recall-layer",
+          "name": "Recall & Orchestration",
+          "color": "#3b82f6",
+          "items": [
+            { "path": "lib/core/recall-service.js", "type": "file" },
+            { "path": "lib/core/orchestrator.js", "type": "file" },
+            { "path": "lib/core/llm-router.js", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "fill"
+        },
+        {
+          "id": "persistence-layer",
+          "name": "Persistence & World Model",
+          "color": "#f59e0b",
+          "items": [
+            { "path": "lib/core/world-model.js", "type": "file" },
+            { "path": "lib/core/projection-store.js", "type": "file" },
+            { "path": "lib/core/event-store.js", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "fill"
+        }
+      ],
+      "interactiveActions": [
+        {
+          "type": "hover-directory",
+          "description": "Hover over lib/core to see all service modules",
+          "target": "lib/core"
+        }
+      ]
+    },
+    {
+      "id": "step-4-capture-pipeline",
+      "title": "Capture Pipeline",
+      "description": "When an agent response completes, capture-service.js extracts <memory_note> XML tags and 'remember intent' phrases. Each candidate passes through policy.js — a junk filter catches system prompts, API keys, and benchmarks, while durable patterns preserve user facts and identity notes. Survivors are deduplicated (exact hash + semantic similarity), scored for quality, and upserted into the projection store. native-promotion.js can also promote chunks from MEMORY.md and daily notes into structured registry entries.",
+      "estimatedTime": 120,
+      "focusDirectory": "lib/core",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "capture-files",
+          "name": "Capture & Quality",
+          "color": "#10b981",
+          "items": [
+            { "path": "lib/core/capture-service.js", "type": "file" },
+            { "path": "lib/core/policy.js", "type": "file" },
+            { "path": "lib/core/native-promotion.js", "type": "file" },
+            { "path": "lib/core/review-queue.js", "type": "file" },
+            { "path": "lib/core/memory-actions.js", "type": "file" }
+          ],
+          "opacity": 0.8,
+          "renderStrategy": "fill"
+        }
+      ],
+      "interactiveActions": [
+        {
+          "type": "click-file",
+          "description": "Click capture-service.js to see how memories are extracted from agent responses",
+          "target": "lib/core/capture-service.js"
+        }
+      ]
+    },
+    {
+      "id": "step-5-recall-orchestration",
+      "title": "Recall & Orchestration",
+      "description": "Before each prompt, orchestrator.js classifies the query into one of five strategies: quick_context (FTS5 lexical search), entity_brief ('Who is X?'), relationship_brief, timeline_brief, or verification_lookup. recall-service.js executes the chosen strategy — searching memory_current with entity coreference resolution, temporal window detection, and class budgets (core/situational/decisions). Results are ranked, token-budgeted, and injected as context. llm-router.js abstracts over Ollama, OpenAI-compatible, and deterministic-only providers.",
+      "estimatedTime": 120,
+      "focusDirectory": "lib/core",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "recall-files",
+          "name": "Recall Stack",
+          "color": "#3b82f6",
+          "items": [
+            { "path": "lib/core/orchestrator.js", "type": "file" },
+            { "path": "lib/core/recall-service.js", "type": "file" },
+            { "path": "lib/core/llm-router.js", "type": "file" },
+            { "path": "lib/core/http-routes.js", "type": "file" }
+          ],
+          "opacity": 0.8,
+          "renderStrategy": "fill"
+        }
+      ],
+      "interactiveActions": [
+        {
+          "type": "click-file",
+          "description": "Click orchestrator.js to see the five recall strategies",
+          "target": "lib/core/orchestrator.js"
+        }
+      ]
+    },
+    {
+      "id": "step-6-world-model",
+      "title": "World Model & Persistence",
+      "description": "world-model.js (the largest module at 2,600 lines) projects atomic memories into structured graphs: entities (person, project, org, place, topic), beliefs (fact-based assertions with temporal markers), episodes (event clusters), open loops (unresolved follow-ups), and syntheses (precomputed briefings). projection-store.js manages the SQLite schema — memory_current provides a materialized view, while event-store.js maintains an append-only log for full audit history. native-sync.js indexes MEMORY.md and daily notes for hybrid native+structured recall.",
+      "estimatedTime": 120,
+      "focusDirectory": "lib/core",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "world-model-files",
+          "name": "World Model & Storage",
+          "color": "#f59e0b",
+          "items": [
+            { "path": "lib/core/world-model.js", "type": "file" },
+            { "path": "lib/core/projection-store.js", "type": "file" },
+            { "path": "lib/core/event-store.js", "type": "file" },
+            { "path": "lib/core/native-sync.js", "type": "file" },
+            { "path": "lib/core/person-service.js", "type": "file" }
+          ],
+          "opacity": 0.8,
+          "renderStrategy": "fill"
+        }
+      ],
+      "interactiveActions": [
+        {
+          "type": "click-file",
+          "description": "Click world-model.js to see entity/belief/episode projection",
+          "target": "lib/core/world-model.js"
+        }
+      ]
+    },
+    {
+      "id": "step-7-full-picture",
+      "title": "The Full Picture",
+      "description": "Beyond core services: vault-mirror.js generates a structured Obsidian vault surface (Home, Entities, Nodes, Views, Briefings, Reports). maintenance-service.js runs a nightly pipeline (snapshot, sync, dedupe, audit, vacuum, vault build). scripts/ has the CLI control plane (gigabrainctl.js) and setup wizard. tests/ provides 20 tests across unit, integration, regression, and performance categories. memory_api/ is an optional Python FastAPI web console for browsing and managing memories.",
+      "estimatedTime": 60,
+      "focusDirectory": "",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "surface-layer",
+          "name": "Surface & Maintenance",
+          "color": "#ec4899",
+          "items": [
+            { "path": "lib/core/vault-mirror.js", "type": "file" },
+            { "path": "lib/core/maintenance-service.js", "type": "file" },
+            { "path": "lib/core/audit-service.js", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "fill"
+        },
+        {
+          "id": "tooling-layer",
+          "name": "Scripts, Tests & Web Console",
+          "color": "#06b6d4",
+          "items": [
+            { "path": "scripts", "type": "directory" },
+            { "path": "tests", "type": "directory" },
+            { "path": "memory_api", "type": "directory" }
+          ],
+          "opacity": 0.6,
+          "renderStrategy": "border"
+        }
+      ],
+      "interactiveActions": [
+        {
+          "type": "explore",
+          "description": "Explore the full codebase — click into any area that interests you"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "author": "Claude",
+    "createdAt": "2026-03-12",
+    "tags": ["onboarding", "architecture", "memory", "ai-agents"]
+  }
+}
