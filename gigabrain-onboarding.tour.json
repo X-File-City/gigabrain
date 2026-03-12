@@ -19,7 +19,7 @@
     {
       "id": "step-2-plugin-entry",
       "title": "Plugin Entry Point",
-      "description": "index.ts is the OpenClaw plugin factory. It wires up event hooks and registers HTTP routes on the gateway. The plugin config file defines the full configuration schema — paths, capture settings, recall tuning, world-model options, and vault output.",
+      "description": "The index file is the OpenClaw plugin factory. It wires up event hooks and registers HTTP routes on the gateway. The plugin config file defines the full configuration schema — paths, capture settings, recall tuning, world-model options, and vault output.",
       "estimatedTime": 60,
       "focusDirectory": "",
       "colorMode": "fileTypes",
