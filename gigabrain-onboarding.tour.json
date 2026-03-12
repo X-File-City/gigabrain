@@ -19,7 +19,7 @@
     {
       "id": "step-2-plugin-entry",
       "title": "Plugin Entry Point",
-      "description": "index.ts is the OpenClaw plugin factory. It wires up event hooks (on:prompt-start for recall injection, on:response-complete for memory capture) and registers HTTP routes on the gateway. openclaw.plugin.json defines the full configuration schema — paths, capture settings, recall tuning, world-model options, and vault output.",
+      "description": "index.ts is the OpenClaw plugin factory. It wires up event hooks and registers HTTP routes on the gateway. The plugin config file defines the full configuration schema — paths, capture settings, recall tuning, world-model options, and vault output.",
       "estimatedTime": 60,
       "focusDirectory": "",
       "colorMode": "fileTypes",
@@ -48,7 +48,7 @@
     {
       "id": "step-3-core-services",
       "title": "Core Services Overview",
-      "description": "The lib/core/ directory contains all service implementations (14K lines). Key modules: config.js validates settings, capture-service.js extracts memories, recall-service.js searches and injects context, orchestrator.js selects recall strategies, world-model.js builds entity/belief/episode graphs, projection-store.js manages SQLite state, and vault-mirror.js generates the Obsidian surface.",
+      "description": "The lib core directory contains all service implementations. Key modules: config validates settings, capture service extracts memories, recall service searches and injects context, orchestrator selects recall strategies, world model builds entity, belief, and episode graphs, projection store manages SQLite state, and vault mirror generates the Obsidian surface.",
       "estimatedTime": 90,
       "focusDirectory": "lib/core",
       "colorMode": "fileTypes",
@@ -101,7 +101,7 @@
     {
       "id": "step-4-capture-pipeline",
       "title": "Capture Pipeline",
-      "description": "When an agent response completes, capture-service.js extracts <memory_note> tags and 'remember intent' phrases. Candidates pass through policy.js for junk filtering and quality scoring, then get deduplicated and upserted into the projection store. native-promotion.js promotes chunks from MEMORY.md into structured registry entries.",
+      "description": "When an agent response completes, capture service extracts memory note tags and remember intent phrases. Candidates pass through the policy module for junk filtering and quality scoring, then get deduplicated and upserted into the projection store. Native promotion promotes chunks from memory files into structured registry entries.",
       "estimatedTime": 120,
       "focusDirectory": "lib/core",
       "colorMode": "fileTypes",
@@ -132,7 +132,7 @@
     {
       "id": "step-5-recall-orchestration",
       "title": "Recall & Orchestration",
-      "description": "Before each prompt, orchestrator.js classifies the query into one of five strategies (quick_context, entity_brief, relationship_brief, timeline_brief, verification_lookup). recall-service.js executes the strategy with coreference resolution, temporal windows, and token budgeting. llm-router.js abstracts over multiple LLM providers.",
+      "description": "Before each prompt, the orchestrator classifies the query into one of five strategies: quick context, entity brief, relationship brief, timeline brief, and verification lookup. The recall service executes the strategy with coreference resolution, temporal windows, and token budgeting. The LLM router abstracts over multiple providers.",
       "estimatedTime": 120,
       "focusDirectory": "lib/core",
       "colorMode": "fileTypes",
